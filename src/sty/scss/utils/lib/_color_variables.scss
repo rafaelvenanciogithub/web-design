@@ -1,0 +1,43 @@
+@use 'sass:math';
+
+
+// local functions to easy
+@function _beta-delta($malpha, $mgamma) {
+  @return math.div($malpha, $mgamma);
+}
+
+@function _delta($alpha, $gamma, $mgamma, $malpha) {
+  $pa1: math.pow($alpha, $gamma);
+  $pa2: math.pow($mgamma, $mgamma);
+  $pa3: ($pa1 * $pa2);
+  $pb1: math.pow($malpha, $mgamma);
+  $pb2: math.pow($gamma, $gamma);
+  $pb3: ($pb1 * $pb2);
+
+  @return math.div($pa3, $pb3);
+}
+
+
+// just values
+$rgb: 255;
+$gamma-dividend: 12;
+$gamma-divisor: 5;
+$alpha-dividend: 211;
+$alpha-divisor: 200;
+
+
+// calculated primary values
+$int: math.div($rgb, $rgb);
+$gamma: math.div($gamma-dividend, $gamma-divisor);
+$alpha: math.div($alpha-dividend, $alpha-divisor);
+
+
+// calculated secondary values
+$mgamma: ($gamma - $int);
+$malpha: ($alpha - $int);
+
+
+// values to work with colors
+$beta-delta: _beta-delta($malpha, $mgamma);
+$delta: _delta($alpha, $gamma, $mgamma, $malpha);
+$beta: math.div($beta-delta, $delta);

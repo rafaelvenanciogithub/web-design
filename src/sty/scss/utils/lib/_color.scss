@@ -1,0 +1,22 @@
+@use 'sass:color';
+@use 'sass:math';
+
+@use 'color_variables' as helper;
+
+
+@function _clip($val, $max) {
+  @return math.div($val, $max);
+}
+
+@function alone-linear-srgb($val) {
+  $sign: if(($val < 0), -1, 1);
+  $abs: math.abs($val);
+  $c: ($abs <= helper.$beta-delta);
+  $t: math.div($val, helper.$delta);
+  $f: ($abs + helper.$malpha);
+  $f: math.div($f, helper.$alpha);
+  $f: math.pow($f, helper.$gamma);
+  $f: ($sign * $f);
+
+  @return if($c, $t, $f);
+}
